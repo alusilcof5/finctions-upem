@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funciones Matemáticas · 3º ESO</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+  :root {
+    --ink: #0f0e17;
+    --paper: #fffcf5;
+    --cream: #f5f0e8;
+    --amber: #e8a020;
+    --amber-light: #f5c842;
+    --teal: #1a7f74;
+    --teal-light: #2ab5a6;
+    --coral: #e05c3a;
+    --navy: #1a2544;
+    --lavender: #7c6fcd;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ─────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-axes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero-curve {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .25;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,160,32,.15);
+    border: 1px solid rgba(232,160,32,.4);
+    color: var(--amber-light);
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 span {
+    color: var(--amber-light);
+    display: block;
+  }
+
+  .hero p {
+    color: rgba(255,255,255,.6);
+    font-size: 1.8rem;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--amber);
+    color: var(--ink);
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: all .25s;
+    font-size: 1.6rem;
+    letter-spacing: .02em;
+  }
+  .btn-primary:hover { background: var(--amber-light); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(232,160,32,.4); }
+
+  /* ── CARRUSEL ────────────────────────────── */
+  .carousel-section {
+    background: var(--cream);
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.15;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform .6s cubic-bezier(.77,0,.175,1);
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    padding: 0 20px;
+  }
+
+  .slide-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 56px 64px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    box-shadow: 0 20px 60px rgba(26,37,68,.08);
+    border: 1px solid rgba(26,37,68,.06);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--teal), var(--amber));
+  }
+
+  .slide-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 7rem;
+    font-weight: 600;
+    color: var(--cream);
+    position: absolute;
+    top: 20px; right: 40px;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .slide-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  .slide-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+
+  .slide-card p {
+    color: #555;
+    line-height: 1.75;
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+
+  .formula-box {
+    background: var(--navy);
+    color: var(--amber-light);
+    font-family: 'JetBrains Mono', monospace;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 1.4rem;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  .carousel-viz {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 24px;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .carousel-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 40px;
+  }
+
+  .carousel-btn {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 2px solid var(--navy);
+    background: transparent;
+    color: var(--navy);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+    font-size: 1.5rem;
+  }
+  .carousel-btn:hover { background: var(--navy); color: #fff; }
+
+  .carousel-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(26,37,68,.2);
+    cursor: pointer;
+    transition: all .3s;
+  }
+  .dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: var(--navy);
+  }
+
+  /* ── TIPOS DE FUNCIÓN ────────────────────── */
+  .types-section {
+    padding: 100px 0;
+    background: var(--paper);
+  }
+
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(540px, 1fr));
+    gap: 28px;
+    margin-top: 60px;
+  }
+
+  .type-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 24px rgba(26,37,68,.06);
+    border: 1px solid rgba(26,37,68,.07);
+    transition: transform .3s, box-shadow .3s;
+    cursor: default;
+  }
+  .type-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(26,37,68,.12);
+  }
+
+  .card-header {
+    padding: 28px 28px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-tag {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    opacity: .7;
+    margin-bottom: 8px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .card-formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.2rem;
+    opacity: .7;
+    margin-top: 4px;
+  }
+
+  .card-graph {
+    width: 100%;
+    background: rgba(0,0,0,.04);
+  }
+
+  .card-body {
+    padding: 20px 28px 28px;
+  }
+
+  .card-body p {
+    font-size: 1.3rem;
+    line-height: 1.65;
+    color: #444;
+    margin-bottom: 12px;
+  }
+
+  .card-props {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .prop-tag {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(0,0,0,.06);
+  }
+
+  /* ── EVALUACIÓN ──────────────────────────── */
+  .eval-section {
+    padding: 100px 0;
+    background: var(--navy);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .eval-section .section-label { color: var(--amber-light); }
+  .eval-section .section-title { color: #fff; }
+
+  .eval-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .quiz-container {
+    max-width: 960px;
+    margin: 60px auto 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .question-card {
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 20px;
+    padding: 36px;
+    margin-bottom: 20px;
+    transition: border-color .3s;
+  }
+
+  .question-card.answered { border-color: rgba(255,255,255,.2); }
+
+  .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .q-num {
+    width: 56px; height: 36px;
+    background: var(--amber);
+    color: var(--ink);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: .9rem;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .q-text {
+    color: rgba(255,255,255,.9);
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .option-btn {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.12);
+    color: rgba(255,255,255,.75);
+    padding: 12px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    transition: all .2s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.25);
+    color: #fff;
+  }
+  .option-btn.correct {
+    background: rgba(42,181,166,.2);
+    border-color: var(--teal-light);
+    color: #fff;
+  }
+  .option-btn.wrong {
+    background: rgba(224,92,58,.18);
+    border-color: var(--coral);
+    color: #fff;
+  }
+  .option-btn:disabled { cursor: default; }
+
+  .option-letter {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: .75rem;
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .feedback {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: .88rem;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback.correct { background: rgba(42,181,166,.15); color: #7ef0e4; border: 1px solid rgba(42,181,166,.3); }
+  .feedback.wrong   { background: rgba(224,92,58,.15);  color: #f9b4a0; border: 1px solid rgba(224,92,58,.3); }
+  .feedback.show { display: block; }
+
+  .score-panel {
+    background: linear-gradient(135deg, var(--teal), var(--navy));
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 24px;
+    padding: 48px;
+    text-align: center;
+    display: none;
+    margin-top: 32px;
+  }
+  .score-panel.show { display: block; }
+  .score-big { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 900; color: var(--amber-light); line-height: 1; }
+  .score-label { color: rgba(255,255,255,.7); font-size: 1rem; margin-top: 8px; margin-bottom: 24px; }
+  .score-msg { color: #fff; font-size: 1.1rem; font-weight: 500; }
+
+  .retry-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--amber);
+    color: var(--ink);
+    font-weight: 700;
+    padding: 12px 28px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .95rem;
+    margin-top: 28px;
+    transition: all .2s;
+  }
+  .retry-btn:hover { background: var(--amber-light); transform: translateY(-2px); }
+
+  /* ── FOOTER ──────────────────────────────── */
+  footer {
+    background: #080c19;
+    color: rgba(255,255,255,.4);
+    text-align: center;
+    padding: 32px;
+    font-size: .85rem;
+  }
+  footer strong { color: var(--amber-light); font-weight: 600; }
+
+  /* ── NAV ─────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(15,14,23,.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--amber-light); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,.6);
+    text-decoration: none;
+    font-size: .88rem;
+    font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: #fff; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .slide-card { grid-template-columns: 1fr; gap: 32px; padding: 36px 28px; }
+    .options-grid { grid-template-columns: 1fr; }
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+  }
+
+  /* Animations */
+  .fade-in { opacity: 0; transform: translateY(30px); }
+  .animate { animation: fadeUp .7s ease forwards; }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">f(x) <span>·</span> Funciones</a>
+  <ul class="nav-links">
+    <li><a href="#concepto">Concepto</a></li>
+    <li><a href="#tipos">Tipos</a></li>
+    <li><a href="#evaluacion">Evaluación</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ────────────────────────────── -->
+<section class="hero" id="inicio">
+  <div class="hero-grid"></div>
+  <div class="hero-blob" style="width:500px;height:500px;background:#1a7f74;top:-100px;right:-150px;"></div>
+  <div class="hero-blob" style="width:400px;height:400px;background:#e8a020;bottom:-100px;left:-100px;"></div>
+
+  <svg class="hero-axes" viewBox="0 0 100 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="50" y1="5" x2="50" y2="95" stroke="rgba(255,255,255,.1)" stroke-width=".3"/>
+    <line x1="5" y1="50" x2="95" y2="50" stroke="rgba(255,255,255,.1)" stroke-width=".3"/>
+    <path d="M 5 80 Q 20 70 35 50 T 65 30 T 95 15"
+          fill="none" stroke="rgba(232,160,32,.5)" stroke-width=".8"
+          stroke-dasharray="2 1"/>
+    <path d="M 5 60 C 20 60 30 40 50 40 S 70 55 95 45"
+          fill="none" stroke="rgba(42,181,166,.4)" stroke-width=".7"
+          stroke-dasharray="2 1"/>
+  </svg>
+
+  <div style="max-width:1200px;margin:0 auto;padding:0 40px;position:relative;z-index:1;">
+    <div class="hero-badge">UPEM · Matemáticas</div>
+    <h1>El mundo<span>de las funciones</span></h1>
+    <p>Descubre cómo las funciones matemáticas describen, modelan y predicen todo lo que nos rodea. Desde la constante más simple hasta las ondas trigonométricas.</p>
+    <a href="#concepto" class="btn-primary">Comenzar el recorrido ↓</a>
+  </div>
+</section>
+
+<!-- ── CARRUSEL ─────────────────────────── -->
+<section class="carousel-section" id="concepto">
+  <div style="max-width:1300px;margin:0 auto;padding:0 40px;">
+    <div class="section-label">Conceptos clave</div>
+    <h2 class="section-title">¿Qué es una función?</h2>
+    <p style="color:#555;max-width:960px;line-height:1.7;margin-bottom:48px; font-size: 2rem;">Navega por las diapositivas para construir una comprensión sólida, paso a paso.</p>
+
+    <div style="overflow:hidden;border-radius:24px;" id="carouselWrapper">
+      <div class="carousel-track" id="carouselTrack">
+
+        <!-- Slide 1 -->
+        <div class="carousel-slide">
+          <div class="slide-card">
+            <div class="slide-number">01</div>
+            <div>
+            
+              <h3>Definición de función</h3>
+              <p>Una <strong>función</strong> es una relación entre dos conjuntos — el <strong>dominio</strong> y el <strong>codominio</strong> — donde a <em>cada elemento del dominio</em> le corresponde <em>exactamente un</em> elemento del codominio.</p>
+              <p>Lo escribimos como <strong>f : A → B</strong>, y leemos "f es una función de A en B".</p>
+              <div class="formula-box">f(x) = y &nbsp;|&nbsp; ∀x ∈ A, ∃! y ∈ B</div>
+            </div>
+            <div class="carousel-viz">
+              <svg viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:280px;">
+                <ellipse cx="80" cy="130" rx="55" ry="100" fill="none" stroke="rgba(42,181,166,.6)" stroke-width="2"/>
+                <ellipse cx="220" cy="130" rx="55" ry="100" fill="none" stroke="rgba(232,160,32,.6)" stroke-width="2"/>
+                <text x="80" y="22" text-anchor="middle" fill="rgba(42,181,166,.8)" font-size="13" font-family="DM Sans">A (dominio)</text>
+                <text x="220" y="22" text-anchor="middle" fill="rgba(232,160,32,.8)" font-size="13" font-family="DM Sans">B (codominio)</text>
+                <circle cx="80" cy="80"  r="6" fill="#2ab5a6"/>
+                <circle cx="80" cy="130" r="6" fill="#2ab5a6"/>
+                <circle cx="80" cy="180" r="6" fill="#2ab5a6"/>
+                <circle cx="220" cy="70"  r="6" fill="#e8a020"/>
+                <circle cx="220" cy="120" r="6" fill="#e8a020"/>
+                <circle cx="220" cy="160" r="6" fill="#e8a020"/>
+                <circle cx="220" cy="200" r="6" fill="rgba(232,160,32,.35)"/>
+                <defs>
+                  <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="rgba(255,255,255,.5)"/>
+                  </marker>
+                </defs>
+                <line x1="86" y1="80"  x2="212" y2="72"  stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <line x1="86" y1="130" x2="212" y2="122" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <line x1="86" y1="180" x2="212" y2="157" stroke="rgba(255,255,255,.4)" stroke-width="1.5" marker-end="url(#arr)"/>
+                <text x="80" y="84"  fill="white" font-size="11" text-anchor="middle" dy="-.5" font-family="JetBrains Mono">x₁</text>
+                <text x="80" y="134" fill="white" font-size="11" text-anchor="middle" dy="-.5" font-family="JetBrains Mono">x₂</text>
+                <text x="80" y="184" fill="white" font-size="11" text-anchor="middle" dy="-.5" font-family="JetBrains Mono">x₃</text>
+                <text x="220" y="74"  fill="white" font-size="11" text-anchor="middle" dy="-.5" font-family="JetBrains Mono">y₁</text>
+                <text x="220" y="124" fill="white" font-size="11" text-anchor="middle" dy="-.5" font-family="JetBrains Mono">y₂</text>
+                <text x="220" y="164" fill="white" font-size="11" text-anchor="middle" dy="-.5" font-family="JetBrains Mono">y₃</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-slide">
+          <div class="slide-card">
+            <div class="slide-number">02</div>
+            <div>
+             
+              <h3>Dominio y recorrido</h3>
+              <p>El <strong>dominio</strong> es el conjunto de todos los valores de <em>x</em> para los que la función está definida. El <strong>recorrido</strong> (imagen) es el conjunto de todos los valores de <em>y</em> que puede tomar la función.</p>
+              <p>Por ejemplo, en f(x) = √x el dominio es x ≥ 0, ya que no podemos calcular la raíz de un número negativo (en ℝ).</p>
+              <div class="formula-box">Dom(f) ⊆ ℝ &nbsp;|&nbsp; Im(f) ⊆ ℝ</div>
+            </div>
+            <div class="carousel-viz">
+              <svg viewBox="0 0 260 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;">
+                <line x1="20" y1="120" x2="240" y2="120" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+                <line x1="120" y1="10" x2="120" y2="230" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+                <text x="236" y="116" fill="rgba(255,255,255,.5)" font-size="11">x</text>
+                <text x="124" y="16" fill="rgba(255,255,255,.5)" font-size="11">y</text>
+                <path d="M 120 120 Q 140 80 180 50 T 235 30" fill="none" stroke="#2ab5a6" stroke-width="2.5"/>
+                <line x1="120" y1="210" x2="235" y2="210" stroke="#e8a020" stroke-width="3" stroke-linecap="round"/>
+                <text x="175" y="226" text-anchor="middle" fill="#e8a020" font-size="11" font-family="DM Sans">Dominio: x ≥ 0</text>
+                <line x1="15" y1="30" x2="15" y2="120" stroke="#7c6fcd" stroke-width="3" stroke-linecap="round"/>
+                <text x="-28" y="78" fill="#7c6fcd" font-size="11" font-family="DM Sans" transform="rotate(-90,15,78)">Recorrido: y ≥ 0</text>
+                <circle cx="120" cy="120" r="5" fill="white"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="carousel-slide">
+          <div class="slide-card">
+            <div class="slide-number">03</div>
+            <div>
+            
+              <h3>Representación gráfica</h3>
+              <p>La <strong>gráfica</strong> de una función es el conjunto de puntos (x, f(x)) en el plano cartesiano. Para saber si una curva es función usamos la <strong>prueba de la recta vertical</strong>: si cualquier recta vertical corta la curva en <em>a lo sumo un punto</em>, es una función.</p>
+              <div class="formula-box">Gráfica: {(x, f(x)) | x ∈ Dom(f)}</div>
+            </div>
+            <div class="carousel-viz">
+              <svg viewBox="0 0 260 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;">
+                <line x1="20" y1="120" x2="240" y2="120" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+                <line x1="130" y1="10" x2="130" y2="230" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+                <path d="M 25 210 C 60 210 80 30 130 30 S 200 210 235 210"
+                      fill="none" stroke="#f5c842" stroke-width="2.5"/>
+                <line x1="175" y1="10" x2="175" y2="230" stroke="rgba(224,92,58,.7)" stroke-width="1.5" stroke-dasharray="5 3"/>
+                <circle cx="175" cy="75" r="5" fill="#e05c3a"/>
+                <text x="180" y="40" fill="#e05c3a" font-size="10" font-family="DM Sans">Recta vertical</text>
+                <text x="180" y="52" fill="#e05c3a" font-size="10" font-family="DM Sans">→ 1 punto ✓</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="carousel-slide">
+          <div class="slide-card">
+            <div class="slide-number">04</div>
+            <div>
+             
+              <h3>Crecimiento y extremos</h3>
+              <p>Una función es <strong>creciente</strong> en un intervalo si al aumentar x, también aumenta f(x). Es <strong>decreciente</strong> si al aumentar x, disminuye f(x).</p>
+              <p>Los <strong>máximos y mínimos</strong> (extremos relativos) son puntos donde la función cambia de creciente a decreciente o viceversa.</p>
+              <div class="formula-box">x₁ &lt; x₂ ⟹ f(x₁) &lt; f(x₂) &nbsp;[creciente]</div>
+            </div>
+            <div class="carousel-viz">
+              <svg viewBox="0 0 260 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;">
+                <line x1="20" y1="180" x2="240" y2="180" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+                <line x1="30" y1="15" x2="30" y2="200" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+                <path d="M 35 160 C 55 100 80 40 110 60 S 155 160 185 120 S 220 60 240 50"
+                      fill="none" stroke="#2ab5a6" stroke-width="2.5"/>
+                <circle cx="110" cy="60" r="6" fill="#f5c842"/>
+                <text x="115" y="55" fill="#f5c842" font-size="10" font-family="DM Sans">máx</text>
+                <circle cx="185" cy="120" r="6" fill="#e05c3a"/>
+                <text x="190" y="133" fill="#e05c3a" font-size="10" font-family="DM Sans">mín</text>
+                <text x="60" y="175" fill="rgba(255,255,255,.5)" font-size="10" font-family="DM Sans">↗ creciente</text>
+                <text x="125" y="155" fill="rgba(255,255,255,.5)" font-size="10" font-family="DM Sans">↘ decrec.</text>
+                <text x="195" y="105" fill="rgba(255,255,255,.5)" font-size="10" font-family="DM Sans">↗ crec.</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="carousel-slide">
+          <div class="slide-card">
+            <div class="slide-number">05</div>
+            <div>
+              
+              <h3>Continuidad y cortes</h3>
+              <p>Una función es <strong>continua</strong> si su gráfica puede trazarse sin levantar el lápiz. Las <strong>raíces</strong> son los puntos donde la función corta al eje X (f(x) = 0). La <strong>ordenada en el origen</strong> es donde corta al eje Y (x = 0).</p>
+              <div class="formula-box">Raíces: f(x) = 0 &nbsp;|&nbsp; Ord. origen: f(0)</div>
+            </div>
+            <div class="carousel-viz">
+              <svg viewBox="0 0 260 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:260px;">
+                <line x1="20" y1="120" x2="240" y2="120" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+                <line x1="130" y1="10" x2="130" y2="230" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+                <path d="M 40 200 C 70 190 90 60 130 60 S 185 190 230 175"
+                      fill="none" stroke="#7c6fcd" stroke-width="2.5"/>
+                <circle cx="72" cy="120" r="6" fill="#e05c3a"/>
+                <circle cx="190" cy="120" r="6" fill="#e05c3a"/>
+                <text x="68" y="112" fill="#e05c3a" font-size="10" font-family="DM Sans">raíz</text>
+                <text x="193" y="112" fill="#e05c3a" font-size="10" font-family="DM Sans">raíz</text>
+                <circle cx="130" cy="60" r="6" fill="#f5c842"/>
+                <line x1="130" y1="60" x2="130" y2="120" stroke="#f5c842" stroke-width="1" stroke-dasharray="3 2"/>
+                <text x="135" y="57" fill="#f5c842" font-size="10" font-family="DM Sans">f(0)</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <div class="carousel-nav">
+      <button class="carousel-btn" id="prevBtn">&#8592;</button>
+      <div class="carousel-dots" id="dots"></div>
+      <button class="carousel-btn" id="nextBtn">&#8594;</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── TIPOS DE FUNCIÓN ──────────────────── -->
+<section class="types-section" id="tipos">
+  <div style="max-width:1200px;margin:0 auto;padding:0 40px;">
+    <div class="section-label">Clasificación</div>
+    <h2 class="section-title">Tipos de funciones</h2>
+    <p style="color:#555;max-width:580px;line-height:1.7;">Desde las más simples hasta las más elaboradas — cada tipo tiene su propia forma, propiedades y aplicaciones en el mundo real.</p>
+
+    <div class="types-grid">
+
+      <!-- 1. Constante -->
+      <div class="type-card fade-in">
+        <div class="card-header" style="background:linear-gradient(135deg,#1a2544,#2a3a6a);">
+          <div class="card-tag" style="color:rgba(245,200,66,.7);">Tipo 1</div>
+          <div class="card-title" style="color:#fff;">Función Constante</div>
+          <div class="card-formula" style="color:rgba(245,200,66,.8);">f(x) = k</div>
+        </div>
+        <svg class="card-graph" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="160" fill="#f8f9fc"/>
+          <line x1="20" y1="80" x2="280" y2="80" stroke="#ccc" stroke-width="1"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#ccc" stroke-width="1"/>
+          <line x1="20" y1="55" x2="280" y2="55" stroke="#1a2544" stroke-width="2.5"/>
+          <text x="255" y="48" fill="#1a2544" font-size="11" font-family="JetBrains Mono">k=3</text>
+        </svg>
+        <div class="card-body">
+          <p>La función constante asigna el mismo valor <strong>k</strong> para cualquier x. Su gráfica es una <strong>recta horizontal</strong> paralela al eje X.</p>
+          <p>Ejemplo real: temperatura de un horno a temperatura estable.</p>
+          <div class="card-props">
+            <span class="prop-tag" style="background:#f0f4ff;color:#1a2544;">Dom = ℝ</span>
+            <span class="prop-tag" style="background:#f0f4ff;color:#1a2544;">Im = {k}</span>
+            <span class="prop-tag" style="background:#f0f4ff;color:#1a2544;">Pendiente = 0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Lineal -->
+      <div class="type-card fade-in">
+        <div class="card-header" style="background:linear-gradient(135deg,#1a7f74,#0d5c54);">
+          <div class="card-tag" style="color:rgba(122,240,228,.7);">Tipo 2</div>
+          <div class="card-title" style="color:#fff;">Función Lineal</div>
+          <div class="card-formula" style="color:rgba(122,240,228,.8);">f(x) = mx</div>
+        </div>
+        <svg class="card-graph" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="160" fill="#f8f9fc"/>
+          <line x1="20" y1="80" x2="280" y2="80" stroke="#ccc" stroke-width="1"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#ccc" stroke-width="1"/>
+          <line x1="20" y1="145" x2="280" y2="15" stroke="#1a7f74" stroke-width="2.5"/>
+          <circle cx="150" cy="80" r="4" fill="#1a7f74"/>
+          <text x="220" y="35" fill="#1a7f74" font-size="11" font-family="JetBrains Mono">m &gt; 0</text>
+        </svg>
+        <div class="card-body">
+          <p>La función lineal pasa siempre por el <strong>origen (0,0)</strong>. El coeficiente <em>m</em> es la <strong>pendiente</strong> y determina la inclinación de la recta.</p>
+          <p>Ejemplo: distancia recorrida a velocidad constante (sin punto de partida diferente).</p>
+          <div class="card-props">
+            <span class="prop-tag" style="background:#e8fff8;color:#0d5c54;">Dom = ℝ</span>
+            <span class="prop-tag" style="background:#e8fff8;color:#0d5c54;">Pasa por (0,0)</span>
+            <span class="prop-tag" style="background:#e8fff8;color:#0d5c54;">Im = ℝ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Afín -->
+      <div class="type-card fade-in">
+        <div class="card-header" style="background:linear-gradient(135deg,#7c6fcd,#574fa0);">
+          <div class="card-tag" style="color:rgba(200,196,255,.7);">Tipo 3</div>
+          <div class="card-title" style="color:#fff;">Función Afín</div>
+          <div class="card-formula" style="color:rgba(200,196,255,.8);">f(x) = mx + b</div>
+        </div>
+        <svg class="card-graph" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="160" fill="#f8f9fc"/>
+          <line x1="20" y1="80" x2="280" y2="80" stroke="#ccc" stroke-width="1"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#ccc" stroke-width="1"/>
+          <line x1="20" y1="130" x2="280" y2="30" stroke="#7c6fcd" stroke-width="2.5"/>
+          <circle cx="150" cy="55" r="5" fill="#7c6fcd"/>
+          <line x1="150" y1="55" x2="150" y2="80" stroke="#e05c3a" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <text x="156" y="72" fill="#e05c3a" font-size="10" font-family="JetBrains Mono">b</text>
+          <text x="205" y="45" fill="#7c6fcd" font-size="11" font-family="JetBrains Mono">m, b ≠ 0</text>
+        </svg>
+        <div class="card-body">
+          <p>Igual que la lineal pero con un <strong>término independiente b</strong>. La recta <em>no pasa por el origen</em>; el valor <em>b</em> indica dónde corta el eje Y.</p>
+          <p>Ejemplo: factura del teléfono = cuota fija (b) + coste por minuto (m).</p>
+          <div class="card-props">
+            <span class="prop-tag" style="background:#f4f0ff;color:#574fa0;">Dom = ℝ</span>
+            <span class="prop-tag" style="background:#f4f0ff;color:#574fa0;">Corta Y en b</span>
+            <span class="prop-tag" style="background:#f4f0ff;color:#574fa0;">Raíz: x = −b/m</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Segundo grado -->
+      <div class="type-card fade-in">
+        <div class="card-header" style="background:linear-gradient(135deg,#c8410a,#8a2d07);">
+          <div class="card-tag" style="color:rgba(255,200,160,.7);">Tipo 4</div>
+          <div class="card-title" style="color:#fff;">Función Cuadrática</div>
+          <div class="card-formula" style="color:rgba(255,200,160,.8);">f(x) = ax² + bx + c</div>
+        </div>
+        <svg class="card-graph" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="160" fill="#f8f9fc"/>
+          <line x1="20" y1="100" x2="280" y2="100" stroke="#ccc" stroke-width="1"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#ccc" stroke-width="1"/>
+          <path d="M 30 150 Q 90 20 150 15 Q 210 20 270 150" fill="none" stroke="#c8410a" stroke-width="2.5"/>
+          <circle cx="150" cy="15" r="5" fill="#c8410a"/>
+          <text x="158" y="22" fill="#c8410a" font-size="10" font-family="JetBrains Mono">vértice</text>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="rgba(200,65,10,.25)" stroke-width="1" stroke-dasharray="4 2"/>
+          <text x="155" y="145" fill="rgba(200,65,10,.6)" font-size="10" font-family="DM Sans">eje simetría</text>
+        </svg>
+        <div class="card-body">
+          <p>Su gráfica es una <strong>parábola</strong>. Si a > 0 abre hacia arriba (mínimo); si a < 0 abre hacia abajo (máximo). El <strong>vértice</strong> es el punto más alto o más bajo.</p>
+          <p>Ejemplo: trayectoria de un proyectil lanzado al aire.</p>
+          <div class="card-props">
+            <span class="prop-tag" style="background:#fff0e8;color:#8a2d07;">Dom = ℝ</span>
+            <span class="prop-tag" style="background:#fff0e8;color:#8a2d07;">Vértice: (−b/2a, …)</span>
+            <span class="prop-tag" style="background:#fff0e8;color:#8a2d07;">Parábola</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Polinómica -->
+      <div class="type-card fade-in">
+        <div class="card-header" style="background:linear-gradient(135deg,#0a6680,#073d4e);">
+          <div class="card-tag" style="color:rgba(130,220,255,.7);">Tipo 5</div>
+          <div class="card-title" style="color:#fff;">Función Polinómica</div>
+          <div class="card-formula" style="color:rgba(130,220,255,.8);">f(x) = aₙxⁿ + … + a₁x + a₀</div>
+        </div>
+        <svg class="card-graph" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="160" fill="#f8f9fc"/>
+          <line x1="20" y1="80" x2="280" y2="80" stroke="#ccc" stroke-width="1"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#ccc" stroke-width="1"/>
+          <path d="M 20 120 C 50 50 80 140 110 80 S 150 20 180 80 S 220 130 260 60 L 280 40"
+                fill="none" stroke="#0a6680" stroke-width="2.5"/>
+        </svg>
+        <div class="card-body">
+          <p>Generalización de las anteriores con múltiples términos. El <strong>grado n</strong> determina el comportamiento: puede tener hasta <em>n raíces</em> y hasta <em>n−1 extremos</em>.</p>
+          <p>Ejemplo: modelos de crecimiento poblacional o curvas de demanda económica.</p>
+          <div class="card-props">
+            <span class="prop-tag" style="background:#e0f4ff;color:#073d4e;">Dom = ℝ</span>
+            <span class="prop-tag" style="background:#e0f4ff;color:#073d4e;">Grado n</span>
+            <span class="prop-tag" style="background:#e0f4ff;color:#073d4e;">Continua en ℝ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Trigonométricas -->
+      <div class="type-card fade-in">
+        <div class="card-header" style="background:linear-gradient(135deg,#6b1a7f,#3d0f4a);">
+          <div class="card-tag" style="color:rgba(220,160,255,.7);">Tipo 6</div>
+          <div class="card-title" style="color:#fff;">Funciones Trigonométricas</div>
+          <div class="card-formula" style="color:rgba(220,160,255,.8);">f(x) = sen(x), cos(x), tan(x)</div>
+        </div>
+        <svg class="card-graph" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="160" fill="#f8f9fc"/>
+          <line x1="20" y1="80" x2="280" y2="80" stroke="#ccc" stroke-width="1"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#ccc" stroke-width="1"/>
+          <!-- Sen wave -->
+          <path d="M 20 80 C 40 20 60 20 80 80 S 120 140 150 80 S 190 20 220 80 S 260 140 280 80"
+                fill="none" stroke="#6b1a7f" stroke-width="2.5"/>
+          <!-- Cos wave -->
+          <path d="M 20 40 C 40 80 60 120 80 80 S 120 20 150 40 S 190 100 220 80 S 260 40 280 60"
+                fill="none" stroke="#dc9fff" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <text x="230" y="40" fill="#6b1a7f" font-size="10" font-family="DM Sans">— sen(x)</text>
+          <text x="230" y="55" fill="#dc9fff" font-size="10" font-family="DM Sans">-- cos(x)</text>
+        </svg>
+        <div class="card-body">
+          <p>Son funciones <strong>periódicas</strong> — se repiten cada 2π. El <strong>seno y coseno</strong> tienen valores entre −1 y 1. La tangente tiene <strong>asíntotas verticales</strong>.</p>
+          <p>Ejemplos: ondas de sonido, mareas, corriente alterna, movimiento armónico.</p>
+          <div class="card-props">
+            <span class="prop-tag" style="background:#faf0ff;color:#3d0f4a;">Periodo: 2π</span>
+            <span class="prop-tag" style="background:#faf0ff;color:#3d0f4a;">Im: [−1, 1]</span>
+            <span class="prop-tag" style="background:#faf0ff;color:#3d0f4a;">Periódica</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Racional -->
+      <div class="type-card fade-in">
+        <div class="card-header" style="background:linear-gradient(135deg,#7a4a00,#4a2c00);">
+          <div class="card-tag" style="color:rgba(255,210,130,.7);">Tipo 7</div>
+          <div class="card-title" style="color:#fff;">Función Racional</div>
+          <div class="card-formula" style="color:rgba(255,210,130,.8);">f(x) = P(x) / Q(x)</div>
+        </div>
+        <svg class="card-graph" viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="300" height="160" fill="#f8f9fc"/>
+          <line x1="20" y1="80" x2="280" y2="80" stroke="#ccc" stroke-width="1"/>
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#ccc" stroke-width="1"/>
+          <!-- Asíntota vertical -->
+          <line x1="150" y1="10" x2="150" y2="150" stroke="#e8a020" stroke-width="1" stroke-dasharray="4 3"/>
+          <!-- Rama izquierda -->
+          <path d="M 30 75 C 60 78 100 82 130 100 C 140 110 145 130 148 155" fill="none" stroke="#7a4a00" stroke-width="2.5"/>
+          <!-- Rama derecha -->
+          <path d="M 270 85 C 240 82 200 78 170 60 C 160 50 155 30 152 5" fill="none" stroke="#7a4a00" stroke-width="2.5"/>
+          <text x="155" y="25" fill="#e8a020" font-size="9" font-family="DM Sans">asíntota</text>
+        </svg>
+        <div class="card-body">
+          <p>Cociente de dos polinomios. No está definida donde el <strong>denominador se anula</strong>. Esas x excluidas generan <strong>asíntotas verticales</strong>; también puede haber asíntotas horizontales.</p>
+          <p>Ejemplo clásico: f(x) = 1/x (hipérbola equilátera), velocidad media = distancia/tiempo.</p>
+          <div class="card-props">
+            <span class="prop-tag" style="background:#fff8e0;color:#4a2c00;">Q(x) ≠ 0</span>
+            <span class="prop-tag" style="background:#fff8e0;color:#4a2c00;">Asíntotas</span>
+            <span class="prop-tag" style="background:#fff8e0;color:#4a2c00;">Dom ⊂ ℝ</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── EVALUACIÓN ────────────────────────── -->
+<section class="eval-section" id="evaluacion">
+  <div class="eval-bg"></div>
+  <div style="max-width:1100px;margin:0 auto;padding:0 40px;position:relative;z-index:1;">
+    <div class="section-label">Comprueba tus conocimientos</div>
+    <h2 class="section-title">10 preguntas de evaluación</h2>
+    <p style="color:rgba(255,255,255,.5);max-width:520px;line-height:1.7;">Selecciona la respuesta correcta para cada pregunta. Al terminar verás tu puntuación y podrás repasar.</p>
+
+    <div class="quiz-container" id="quizContainer"></div>
+
+    <div class="score-panel" id="scorePanel">
+      <div class="score-big" id="scoreValue"></div>
+      <div class="score-label">de 10 preguntas correctas</div>
+      <div class="score-msg" id="scoreMsg"></div>
+      <button class="retry-btn" onclick="resetQuiz()">↺ Volver a intentar</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- ── FOOTER ────────────────────────────── -->
+<footer>
+  <p>Elaborado para <strong>UPEM· Matemáticas</strong> · Ana Lucía Silva</p>
+</footer>
+
+<script>
+/* ── CAROUSEL ──────────────────────────────────── */
+const track = document.getElementById('carouselTrack');
+const dotsContainer = document.getElementById('dots');
+const slides = document.querySelectorAll('.carousel-slide');
+let current = 0;
+let autoTimer;
+
+// Build dots
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsContainer.appendChild(d);
+});
+
+function goTo(n) {
+  current = (n + slides.length) % slides.length;
+  track.style.transform = `translateX(-${current * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) =>
+    d.classList.toggle('active', i === current)
+  );
+}
+
+document.getElementById('prevBtn').onclick = () => { goTo(current - 1); resetAuto(); };
+document.getElementById('nextBtn').onclick = () => { goTo(current + 1); resetAuto(); };
+
+
+
+/* ── QUIZ ──────────────────────────────────────── */
+const questions = [
+  {
+    q: "¿Cuál de las siguientes afirmaciones define correctamente una función?",
+    opts: [
+      "A cada elemento del dominio le pueden corresponder varios valores",
+      "A cada elemento del dominio le corresponde exactamente un valor del codominio",
+      "Todos los elementos del codominio deben tener una preimagen",
+      "El dominio y el codominio deben ser iguales"
+    ],
+    correct: 1,
+    feedback: "✅ Exacto. La clave es la unicidad: a cada x del dominio le corresponde un único y. Puede haber elementos del codominio sin preimagen."
+  },
+  {
+    q: "La función f(x) = −5 es un ejemplo de función…",
+    opts: ["Lineal con pendiente negativa", "Afín con b = −5", "Constante", "Cuadrática con a = 0"],
+    correct: 2,
+    feedback: "✅ Correcto. f(x) = k (constante) es una función constante. Su gráfica es una recta horizontal."
+  },
+  {
+    q: "¿Qué diferencia hay entre una función lineal f(x) = mx y una función afín f(x) = mx + b?",
+    opts: [
+      "La función afín tiene mayor pendiente",
+      "La función lineal no pasa por el origen",
+      "La función afín incluye un término independiente b ≠ 0",
+      "No hay diferencia, son lo mismo"
+    ],
+    correct: 2,
+    feedback: "✅ Así es. La función afín tiene término independiente b, por lo que su recta no pasa por el origen. Si b = 0 se convierte en lineal."
+  },
+  {
+    q: "En la función cuadrática f(x) = ax² + bx + c, si a < 0, la parábola…",
+    opts: [
+      "Abre hacia arriba y tiene un mínimo",
+      "Abre hacia abajo y tiene un máximo",
+      "Es una recta decreciente",
+      "No tiene vértice"
+    ],
+    correct: 1,
+    feedback: "✅ Perfecto. Cuando a < 0 la parábola abre hacia abajo (⌢) y el vértice es un máximo. Si a > 0 abre hacia arriba (⌣) y el vértice es un mínimo."
+  },
+  {
+    q: "¿Cuál es el dominio de la función racional f(x) = 1 / (x − 3)?",
+    opts: [
+      "Todos los reales excepto x = 0",
+      "Todos los reales excepto x = 3",
+      "Solo los números positivos",
+      "Todos los reales"
+    ],
+    correct: 1,
+    feedback: "✅ Correcto. El denominador no puede ser cero, así que x − 3 ≠ 0, es decir x ≠ 3. Dom(f) = ℝ \\ {3}."
+  },
+  {
+    q: "¿Cuál es el período de la función seno f(x) = sen(x)?",
+    opts: ["π", "2π", "π/2", "4π"],
+    correct: 1,
+    feedback: "✅ Exacto. Las funciones seno y coseno tienen período 2π, lo que significa que se repiten cada 2π unidades en el eje x."
+  },
+  {
+    q: "¿Qué herramienta gráfica permite verificar si una curva es una función?",
+    opts: [
+      "La prueba de la recta horizontal",
+      "La prueba de la recta vertical",
+      "El cálculo del discriminante",
+      "La regla de Ruffini"
+    ],
+    correct: 1,
+    feedback: "✅ La prueba de la recta vertical: si cualquier recta vertical corta la gráfica en más de un punto, la curva NO es una función."
+  },
+  {
+    q: "Una función polinómica de grado 4 puede tener como máximo…",
+    opts: [
+      "2 raíces reales y 1 extremo",
+      "4 raíces reales y 3 extremos relativos",
+      "4 raíces reales y 4 extremos relativos",
+      "3 raíces reales y 4 extremos relativos"
+    ],
+    correct: 1,
+    feedback: "✅ Un polinomio de grado n tiene a lo sumo n raíces reales y hasta n − 1 extremos relativos. Para grado 4: máx. 4 raíces y 3 extremos."
+  },
+  {
+    q: "¿Qué nombre recibe el valor f(0) en la gráfica de una función?",
+    opts: [
+      "La raíz de la función",
+      "El vértice de la parábola",
+      "La ordenada en el origen",
+      "La asíntota horizontal"
+    ],
+    correct: 2,
+    feedback: "✅ Correcto. f(0) es el punto donde la gráfica corta al eje Y, que se llama ordenada en el origen. Las raíces son donde f(x) = 0."
+  },
+  {
+    q: "La función f(x) = cos(x) tiene imagen (recorrido)…",
+    opts: [
+      "Todos los reales ℝ",
+      "Solo los números positivos",
+      "El intervalo [−1, 1]",
+      "El intervalo [0, 2π]"
+    ],
+    correct: 2,
+    feedback: "✅ Las funciones seno y coseno tienen siempre valores entre −1 y 1, es decir, Im(f) = [−1, 1]. Nunca superan ni bajan de esos límites."
+  }
+];
+
+let answered = new Array(10).fill(false);
+let score = 0;
+
+function buildQuiz() {
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `q${qi}`;
+
+    const letters = ['A','B','C','D'];
+    card.innerHTML = `
+      <div class="q-header">
+        <div class="q-num">${String(qi+1).padStart(2,'0')}</div>
+        <div class="q-text">${q.q}</div>
+      </div>
+      <div class="options-grid">
+        ${q.opts.map((opt, oi) => `
+          <button class="option-btn" onclick="answer(${qi},${oi})" id="opt-${qi}-${oi}">
+            <span class="option-letter">${letters[oi]}</span>
+            ${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="feedback" id="fb-${qi}"></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function answer(qi, oi) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+
+  const q = questions[qi];
+  const allBtns = document.querySelectorAll(`[id^="opt-${qi}-"]`);
+  allBtns.forEach(b => b.disabled = true);
+
+  const chosen = document.getElementById(`opt-${qi}-${oi}`);
+  const correct = document.getElementById(`opt-${qi}-${q.correct}`);
+
+  if (oi === q.correct) {
+    chosen.classList.add('correct');
+    score++;
+  } else {
+    chosen.classList.add('wrong');
+    correct.classList.add('correct');
+  }
+
+  const fb = document.getElementById(`fb-${qi}`);
+  fb.className = `feedback ${oi === q.correct ? 'correct' : 'wrong'} show`;
+  fb.textContent = oi === q.correct ? q.feedback : `❌ No es correcto. ${q.feedback}`;
+
+  document.getElementById(`q${qi}`).classList.add('answered');
+
+  if (answered.every(Boolean)) showScore();
+}
+
+function showScore() {
+  const panel = document.getElementById('scorePanel');
+  const val = document.getElementById('scoreValue');
+  const msg = document.getElementById('scoreMsg');
+
+  val.textContent = `${score}/10`;
+
+  const msgs = [
+    [0,3, "Sigue repasando el material. ¡Puedes mejorar! 💪"],
+    [4,6, "Buen trabajo, ya dominas varios conceptos. ¡Un poco más! 📖"],
+    [7,8, "¡Muy bien! Tienes una comprensión sólida de las funciones. 🎯"],
+    [9,10,"¡Excelente! Dominas perfectamente el tema. ¡Matemático/a en potencia! 🏆"]
+  ];
+  const found = msgs.find(([lo, hi]) => score >= lo && score <= hi);
+  msg.textContent = found[2];
+
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz() {
+  answered = new Array(10).fill(false);
+  score = 0;
+  document.getElementById('scorePanel').classList.remove('show');
+  buildQuiz();
+  document.getElementById('quizContainer').scrollIntoView({ behavior: 'smooth' });
+}
+
+buildQuiz();
+
+/* ── INTERSECTION OBSERVER (fade in cards) ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('animate'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
