@@ -1081,51 +1081,6 @@ const questions = [
     feedback: "✅ Exacto. La clave es la unicidad: a cada x del dominio le corresponde un único y. Puede haber elementos del codominio sin preimagen."
   },
   {
-    q: "La función f(x) = −5 es un ejemplo de función…",
-    opts: ["Lineal con pendiente negativa", "Afín con b = −5", "Constante", "Cuadrática con a = 0"],
-    correct: 2,
-    feedback: "✅ Correcto. f(x) = k (constante) es una función constante. Su gráfica es una recta horizontal."
-  },
-  {
-    q: "¿Qué diferencia hay entre una función lineal f(x) = mx y una función afín f(x) = mx + b?",
-    opts: [
-      "La función afín tiene mayor pendiente",
-      "La función lineal no pasa por el origen",
-      "La función afín incluye un término independiente b ≠ 0",
-      "No hay diferencia, son lo mismo"
-    ],
-    correct: 2,
-    feedback: "✅ Así es. La función afín tiene término independiente b, por lo que su recta no pasa por el origen. Si b = 0 se convierte en lineal."
-  },
-  {
-    q: "En la función cuadrática f(x) = ax² + bx + c, si a < 0, la parábola…",
-    opts: [
-      "Abre hacia arriba y tiene un mínimo",
-      "Abre hacia abajo y tiene un máximo",
-      "Es una recta decreciente",
-      "No tiene vértice"
-    ],
-    correct: 1,
-    feedback: "✅ Perfecto. Cuando a < 0 la parábola abre hacia abajo (⌢) y el vértice es un máximo. Si a > 0 abre hacia arriba (⌣) y el vértice es un mínimo."
-  },
-  {
-    q: "¿Cuál es el dominio de la función racional f(x) = 1 / (x − 3)?",
-    opts: [
-      "Todos los reales excepto x = 0",
-      "Todos los reales excepto x = 3",
-      "Solo los números positivos",
-      "Todos los reales"
-    ],
-    correct: 1,
-    feedback: "✅ Correcto. El denominador no puede ser cero, así que x − 3 ≠ 0, es decir x ≠ 3. Dom(f) = ℝ \\ {3}."
-  },
-  {
-    q: "¿Cuál es el período de la función seno f(x) = sen(x)?",
-    opts: ["π", "2π", "π/2", "4π"],
-    correct: 1,
-    feedback: "✅ Exacto. Las funciones seno y coseno tienen período 2π, lo que significa que se repiten cada 2π unidades en el eje x."
-  },
-  {
     q: "¿Qué herramienta gráfica permite verificar si una curva es una función?",
     opts: [
       "La prueba de la recta horizontal",
@@ -1137,15 +1092,70 @@ const questions = [
     feedback: "✅ La prueba de la recta vertical: si cualquier recta vertical corta la gráfica en más de un punto, la curva NO es una función."
   },
   {
-    q: "Una función polinómica de grado 4 puede tener como máximo…",
+    q: "Una función lineal tiene la forma f(x) = mx. ¿Qué representa la m?",
     opts: [
-      "2 raíces reales y 1 extremo",
-      "4 raíces reales y 3 extremos relativos",
-      "4 raíces reales y 4 extremos relativos",
-      "3 raíces reales y 4 extremos relativos"
+      "La ordenada en el origen",
+      "El punto de corte con el eje X",
+      "La pendiente de la recta",
+      "El dominio de la función"
+    ],
+    correct: 2,
+    feedback: "✅ Correcto. La m es la pendiente, que indica cuánto sube o baja la recta. Si m > 0 es creciente, si m < 0 es decreciente."
+  },
+  {
+    q: "¿Por qué punto pasa siempre una función lineal f(x) = mx?",
+    opts: [
+      "Por el punto (1, 1)",
+      "Por el origen (0, 0)",
+      "Por el punto (m, 0)",
+      "No pasa siempre por un punto fijo"
     ],
     correct: 1,
-    feedback: "✅ Un polinomio de grado n tiene a lo sumo n raíces reales y hasta n − 1 extremos relativos. Para grado 4: máx. 4 raíces y 3 extremos."
+    feedback: "✅ Exacto. Como f(0) = m·0 = 0, toda función lineal pasa por el origen. Si no pasa por el origen, es una función afín."
+  },
+  {
+    q: "Si una función lineal f(x) = mx tiene m = 0, entonces…",
+    opts: [
+      "Es una recta vertical",
+      "Es una función constante f(x) = 0",
+      "No es una función",
+      "Su gráfica es una parábola"
+    ],
+    correct: 1,
+    feedback: "✅ Correcto. Si m = 0, entonces f(x) = 0·x = 0 para todo x. Es la función constante cero, una recta horizontal sobre el eje X."
+  },
+  {
+    q: "¿Cuál es el dominio de una función lineal f(x) = mx?",
+    opts: [
+      "Solo los números positivos",
+      "Solo los números enteros",
+      "Todos los números reales ℝ",
+      "Depende del valor de m"
+    ],
+    correct: 2,
+    feedback: "✅ Perfecto. El dominio de cualquier función lineal es ℝ (todos los reales), ya que se puede evaluar para cualquier valor de x."
+  },
+  {
+    q: "En una relación, ¿cuándo NO es una función?",
+    opts: [
+      "Cuando hay elementos del codominio sin preimagen",
+      "Cuando un elemento del dominio se asocia a más de un elemento del codominio",
+      "Cuando el dominio tiene infinitos elementos",
+      "Cuando hay elementos repetidos en el codominio"
+    ],
+    correct: 1,
+    feedback: "✅ Exacto. Si un mismo x tiene dos imágenes distintas, rompe la regla de unicidad y no es función. Ejemplo: x² tiene dos raíces (+√ y −√)."
+  },
+  {
+    q: "Si f(x) = −3x, ¿qué tipo de función es y cómo es su gráfica?",
+    opts: [
+      "Constante, recta horizontal",
+      "Lineal creciente, recta que sube",
+      "Lineal decreciente, recta que baja",
+      "Cuadrática, parábola"
+    ],
+    correct: 2,
+    feedback: "✅ Correcto. Es lineal con m = −3 < 0, por lo que es decreciente. Su recta pasa por el origen y baja de izquierda a derecha."
   },
   {
     q: "¿Qué nombre recibe el valor f(0) en la gráfica de una función?",
@@ -1159,15 +1169,15 @@ const questions = [
     feedback: "✅ Correcto. f(0) es el punto donde la gráfica corta al eje Y, que se llama ordenada en el origen. Las raíces son donde f(x) = 0."
   },
   {
-    q: "La función f(x) = cos(x) tiene imagen (recorrido)…",
+    q: "Para que una gráfica represente una función, cada valor de x debe tener…",
     opts: [
-      "Todos los reales ℝ",
-      "Solo los números positivos",
-      "El intervalo [−1, 1]",
-      "El intervalo [0, 2π]"
+      "Al menos un valor de y asociado",
+      "Exactamente un valor de y asociado",
+      "Dos valores de y asociados",
+      "Un valor de y positivo"
     ],
-    correct: 2,
-    feedback: "✅ Las funciones seno y coseno tienen siempre valores entre −1 y 1, es decir, Im(f) = [−1, 1]. Nunca superan ni bajan de esos límites."
+    correct: 1,
+    feedback: "✅ Perfecto. Es la definición de función: cada x del dominio tiene exactamente una imagen y. Ni cero, ni dos o más."
   }
 ];
 

@@ -1,0 +1,17 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000f\u0000i\u0000n\u0000c\u0000t\u0000i\u0000o\u0000n\u0000s\u0000-\u0000u\u0000p\u0000e\u0000m\u0000\r\u0000 \u0000",
+  "main": "funciones.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "docx": "^9.6.1",
+    "docx-pdf": "^0.0.1",
+    "pdfkit": "^0.18.0"
+  }
+}
