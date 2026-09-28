@@ -1065,121 +1065,124 @@ function goTo(n) {
 document.getElementById('prevBtn').onclick = () => { goTo(current - 1); resetAuto(); };
 document.getElementById('nextBtn').onclick = () => { goTo(current + 1); resetAuto(); };
 
-
-
-/* ── QUIZ ──────────────────────────────────────── */
 const questions = [
   {
     q: "¿Cuál de las siguientes afirmaciones define correctamente una función?",
     opts: [
       "A cada elemento del dominio le pueden corresponder varios valores",
-      "A cada elemento del dominio le corresponde exactamente un valor del codominio",
       "Todos los elementos del codominio deben tener una preimagen",
-      "El dominio y el codominio deben ser iguales"
+      "A cada elemento del dominio le corresponde exactamente un elemento del codominio",
+      "El dominio y el codominio deben tener el mismo número de elementos"
     ],
-    correct: 1,
-    feedback: "✅ Exacto. La clave es la unicidad: a cada x del dominio le corresponde un único y. Puede haber elementos del codominio sin preimagen."
+    correct: 2,
+    feedback: "La clave es la unicidad: cada x del dominio tiene una única imagen y. Pueden quedar elementos del codominio sin preimagen."
   },
   {
-    q: "¿Qué herramienta gráfica permite verificar si una curva es una función?",
+    q: "¿Qué prueba gráfica permite comprobar si una curva es la gráfica de una función?",
     opts: [
       "La prueba de la recta horizontal",
-      "La prueba de la recta vertical",
       "El cálculo del discriminante",
-      "La regla de Ruffini"
+      "La regla de Ruffini",
+      "La prueba de la recta vertical"
+    ],
+    correct: 3,
+    feedback: "Si alguna recta vertical corta la curva en más de un punto, un mismo x tendría varias imágenes y la curva no es función."
+  },
+  {
+    q: "Sea la relación de A = {1, 2, 3} en B = {a, b} dada por 1→a, 2→a, 3→b. ¿Es una función?",
+    opts: [
+      "No, porque a recibe dos flechas",
+      "Sí, porque cada elemento de A tiene una única flecha",
+      "No, porque B tiene menos elementos que A",
+      "Sí, pero solo si se añade una flecha desde b"
     ],
     correct: 1,
-    feedback: "✅ La prueba de la recta vertical: si cualquier recta vertical corta la gráfica en más de un punto, la curva NO es una función."
+    feedback: "Lo que importa es que de cada elemento de A salga una sola flecha. Que dos elementos lleguen al mismo valor sí está permitido."
   },
   {
-    q: "Una función lineal tiene la forma f(x) = mx. ¿Qué representa la m?",
+    q: "Sea la relación de A = {1, 2, 3} en B = {a, b} dada por 1→a, 1→b, 2→b, 3→a. ¿Es una función?",
     opts: [
-      "La ordenada en el origen",
-      "El punto de corte con el eje X",
-      "La pendiente de la recta",
-      "El dominio de la función"
+      "Sí, porque todos los elementos de A están relacionados",
+      "Sí, porque B tiene dos elementos",
+      "No, porque b recibe dos flechas",
+      "No, porque el elemento 1 tiene dos imágenes distintas"
     ],
-    correct: 2,
-    feedback: "✅ Correcto. La m es la pendiente, que indica cuánto sube o baja la recta. Si m > 0 es creciente, si m < 0 es decreciente."
+    correct: 3,
+    feedback: "Del elemento 1 salen dos flechas (a y b). Un mismo valor de la variable independiente no puede tener dos imágenes."
   },
   {
-    q: "¿Por qué punto pasa siempre una función lineal f(x) = mx?",
+    q: "¿Es función el conjunto de pares ordenados {(1, 3), (2, 5), (3, 3), (4, 7)}?",
     opts: [
-      "Por el punto (1, 1)",
-      "Por el origen (0, 0)",
-      "Por el punto (m, 0)",
-      "No pasa siempre por un punto fijo"
+      "Sí, porque ningún valor de x se repite con valores de y distintos",
+      "No, porque el valor y = 3 se repite",
+      "No, porque los valores de y no están ordenados",
+      "Solo si x e y toman los mismos valores"
     ],
-    correct: 1,
-    feedback: "✅ Exacto. Como f(0) = m·0 = 0, toda función lineal pasa por el origen. Si no pasa por el origen, es una función afín."
+    correct: 0,
+    feedback: "Repetir un valor de y es válido. Lo que invalida una función es repetir un valor de x con imágenes distintas."
   },
   {
-    q: "Si una función lineal f(x) = mx tiene m = 0, entonces…",
+    q: "¿Por qué {(2, 4), (2, 6), (3, 1)} no es una función?",
     opts: [
-      "Es una recta vertical",
-      "Es una función constante f(x) = 0",
-      "No es una función",
-      "Su gráfica es una parábola"
+      "Porque el valor x = 2 está asociado a dos valores de y",
+      "Porque contiene solo tres pares",
+      "Porque hay valores de y menores que los de x",
+      "Porque el valor x = 3 solo aparece una vez"
     ],
-    correct: 1,
-    feedback: "✅ Correcto. Si m = 0, entonces f(x) = 0·x = 0 para todo x. Es la función constante cero, una recta horizontal sobre el eje X."
+    correct: 0,
+    feedback: "El valor x = 2 aparece con y = 4 y con y = 6. Incumple la condición de función."
   },
   {
-    q: "¿Cuál es el dominio de una función lineal f(x) = mx?",
+    q: "En la relación y = 4x, ¿cuál es la variable independiente y cuál la dependiente?",
     opts: [
-      "Solo los números positivos",
-      "Solo los números enteros",
-      "Todos los números reales ℝ",
-      "Depende del valor de m"
-    ],
-    correct: 2,
-    feedback: "✅ Perfecto. El dominio de cualquier función lineal es ℝ (todos los reales), ya que se puede evaluar para cualquier valor de x."
-  },
-  {
-    q: "En una relación, ¿cuándo NO es una función?",
-    opts: [
-      "Cuando hay elementos del codominio sin preimagen",
-      "Cuando un elemento del dominio se asocia a más de un elemento del codominio",
-      "Cuando el dominio tiene infinitos elementos",
-      "Cuando hay elementos repetidos en el codominio"
+      "y es independiente y x es dependiente",
+      "x es independiente e y es dependiente",
+      "Ambas son independientes",
+      "Depende del valor de x"
     ],
     correct: 1,
-    feedback: "✅ Exacto. Si un mismo x tiene dos imágenes distintas, rompe la regla de unicidad y no es función. Ejemplo: x² tiene dos raíces (+√ y −√)."
+    feedback: "Elegimos libremente x (independiente); el valor de y (dependiente) queda determinado por él."
   },
   {
-    q: "Si f(x) = −3x, ¿qué tipo de función es y cómo es su gráfica?",
+    q: "Una tabla tiene los pares (x, y): (1, 5), (2, 6), (2, 7), (3, 8). ¿Representa una función?",
     opts: [
-      "Constante, recta horizontal",
-      "Lineal creciente, recta que sube",
-      "Lineal decreciente, recta que baja",
-      "Cuadrática, parábola"
+      "Sí, porque tiene cuatro filas",
+      "Sí, porque los valores de y son todos distintos",
+      "No, porque los valores de y crecen",
+      "No, porque x = 2 aparece con dos valores de y"
     ],
-    correct: 2,
-    feedback: "✅ Correcto. Es lineal con m = −3 < 0, por lo que es decreciente. Su recta pasa por el origen y baja de izquierda a derecha."
+    correct: 3,
+    feedback: "Que todos los valores de y sean distintos no basta: hay que revisar que ningún x se repita con imágenes diferentes."
   },
   {
-    q: "¿Qué nombre recibe el valor f(0) en la gráfica de una función?",
+    q: "En notación funcional, ¿qué significa f(3) = 7?",
     opts: [
-      "La raíz de la función",
-      "El vértice de la parábola",
-      "La ordenada en el origen",
-      "La asíntota horizontal"
-    ],
-    correct: 2,
-    feedback: "✅ Correcto. f(0) es el punto donde la gráfica corta al eje Y, que se llama ordenada en el origen. Las raíces son donde f(x) = 0."
-  },
-  {
-    q: "Para que una gráfica represente una función, cada valor de x debe tener…",
-    opts: [
-      "Al menos un valor de y asociado",
-      "Exactamente un valor de y asociado",
-      "Dos valores de y asociados",
-      "Un valor de y positivo"
+      "Que multiplicamos f por 3 y obtenemos 7",
+      "Que cuando x vale 3, la función toma el valor 7",
+      "Que f vale 3 cuando x vale 7",
+      "Que la función tiene 3 raíces y 7 extremos"
     ],
     correct: 1,
-    feedback: "✅ Perfecto. Es la definición de función: cada x del dominio tiene exactamente una imagen y. Ni cero, ni dos o más."
+    feedback: "f(3) = 7 indica que la imagen de x = 3 es y = 7. Corresponde al punto (3, 7) de la gráfica."
+  },
+  {
+    q: "¿Cuál de estas relaciones es una función?",
+    opts: [
+      "A cada fecha, las personas que nacieron ese día",
+      "A cada persona, su fecha de nacimiento",
+      "A cada país, las personas que viven en él",
+      "A cada apellido, las personas que lo tienen"
+    ],
+    correct: 1,
+    feedback: "Cada persona tiene una única fecha de nacimiento. En las otras opciones, un mismo elemento de partida se relaciona con varios."
   }
 ];
+
+/* 2) ── En answer(), sustituye la línea fb.textContent = ... por: ─────── */
+// fb.textContent = (oi === q.correct ? '✅ Correcto. ' : '❌ No es correcto. ') + q.feedback;
+
+/* 3) ── Añade esta función junto al carrusel (evita "resetAuto is not defined") ── */
+function resetAuto() { /* sin autoplay: no hace nada */ }
 
 let answered = new Array(10).fill(false);
 let score = 0;
